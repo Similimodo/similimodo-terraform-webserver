@@ -1,0 +1,19 @@
+aws sts get-caller-identity --profile Terraform # Lists the user id and the arn and account
+aws s3 ls --profile Terraform   # Lists s3 buckets 1274  aws ec2 describe-instance-types
+ 1273  aws ec2 help
+ 1274  aws ec2 describe-instance-types
+ 1275  aws ec2 describe-instances --instance-ids i-0abcdef1234567890 --output json
+ 1276  aws ec2 describe-instances --instance-ids i-06a83f178e94662a5 --output json
+ 1277  mkdir scripts
+ 1278  cd scripts
+ 1279  touch userdata.sh
+ 1280  terraform plan
+ 1281  cd ..
+ 1282  terraform plan
+ 1283  pwd
+ 1284  terraform plan
+ 1285  terraform plan -out=myplan.tfplan
+ 1286   terraform apply "myplan.tfplan"
+ 1287  terraform plan
+ 1288  terraform apply -replace=aws_instance.apache_machine
+ 1289  history
