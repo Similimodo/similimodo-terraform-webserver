@@ -1,15 +1,51 @@
 version: 0.2
 
 phases:
-  pre_build:
+  # The 'install' phase is for installing software needed for your build.
+  # Moved Terraform installation here, which is standard practice.
+  install:
     commands:
+      - echo "Installing Terraform..."
+      # For Amazon Linux (which your CodeBuild image 'aws/codebuild/amazonlinux2-x86_64-standard:4.0' is)
+      # using yum-config-manager is the correct way.
       - yum install -y yum-utils
       - yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
       - yum -y install terraform
       - terraform version
-  build:  
+      - echo "Terraform installed successfully."
+
+  # The 'pre_build' phase is for commands to prepare for the build.
+  # This is where we'll change the directory.
+  pre_build:
     commands:
-      - terraform init
-      - terraform plan
-      - terraform apply
-       
+      - echo "Current directory at start of pre_build:"
+      - pwd
+      - echo "Listing contents of source directory:"
+      - ls -la ${CODEBUILD_SRC_DIR} # List contents of the cloned repo root
+
+      - echo "Changing directory to where Terraform files are located..."
+      - cd ${CODEBUILD_SRC_DIR}/aws/cicd_pipeline/ # CRITICAL: Change to your Terraform subdirectory
+      - echo "Current directory after cd:"
+      - pwd
+      - echo "Listing contents of Terraform directory:"
+      - ls -la . # List contents of the new current directory (should show your .tf files)
+
+      - echo "Initializing Terraform..."
+      - terraform init # Run terraform init in the correct directory
+
+  # The 'build' phase is where your main build commands run.
+  build:
+    commands:
+      - echo "Running Terraform plan..."
+      - terraform plan # This will now run in ${CODEBUILD_SRC_DIR}/aws/cicd_pipeline/
+
+      - echo "Running Terraform apply..."
+      # WARNING: Using --auto-approve in a build phase is risky for production.
+      # Consider using approval steps in CodePipeline for automated deployments to production.
+      - terraform apply --auto-approve
+
+  # The 'post_build' phase for cleanup or final actions.
+  post_build:
+    commands:
+      - echo "Terraform deployment complete."
+      - echo "Build finished successfully."
