@@ -24,7 +24,7 @@ phases:
       - ls -la ${CODEBUILD_SRC_DIR} # List contents of the cloned repo root
 
       - echo "Changing directory to where Terraform files are located..."
-      - cd ${CODEBUILD_SRC_DIR}/aws/cicd_pipeline/ # CRITICAL: Change to your Terraform subdirectory
+      - cd ${CODEBUILD_SRC_DIR}/aws/cicd/ # CRITICAL: Change to your Terraform subdirectory
       - echo "Current directory after cd:"
       - pwd
       - echo "Listing contents of Terraform directory:"
