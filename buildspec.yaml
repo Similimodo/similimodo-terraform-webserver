@@ -10,6 +10,6 @@ phases:
   build:  
     commands:
       - terraform init
-      - terraform plan -out "tfplan"
-      - terraform apply "tfplan"
+      - terraform plan
+      - terraform apply
        
